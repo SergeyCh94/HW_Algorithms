@@ -1,23 +1,40 @@
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-public class ArrayList implements StringList{
-
-    private String[] data;
+public class IntegerArrayList implements IntegerList{
+    private Integer[] data;
     private int size;
     private int capacity;
 
-    public ArrayList(int capacity) {
+    public IntegerArrayList(int capacity) {
         if (capacity < 0){
             throw new IllegalArgumentException("Размер не может быть отрицательным значением");
         }
         this.capacity = capacity;
-        this.data = new String[capacity];
+        this.data = new Integer[capacity];
         this.size = 0;
     }
 
+    private void bubbleSort(Integer[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // swap arr[j+1] and arr[j]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    private int binarySearch(int key, int fromIndex, int toIndex) {
+        return Arrays.binarySearch(toArray(), fromIndex, toIndex, key);
+    }
+
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
@@ -27,7 +44,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
@@ -44,21 +61,21 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
-        String replaced = data[index];
+        Integer replaced = data[index];
         data[index] = item;
         return replaced;
     }
 
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя удалить null");
         }
@@ -71,11 +88,11 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String remove(int index) {
+    public Integer remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
-        String removed = data[index];
+        Integer removed = data[index];
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i+1];
         }
@@ -85,20 +102,12 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public boolean contains(String item) {
-        if (item == null) {
-            return false;
-        }
-        for (int i = 0; i < size; i++) {
-            if (item.equals(data[i])) {
-                return true;
-            }
-        }
-        return false;
+    public boolean contains(Integer item) {
+        return binarySearch(item, 0, size()) >= 0;
     }
 
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
         if (item == null) {
             return -1;
         }
@@ -111,7 +120,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
         if (item == null) {
             return -1;
         }
@@ -124,7 +133,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
@@ -132,7 +141,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public boolean equals(StringList otherList) {
+    public boolean equals(IntegerList otherList) {
         if (otherList == null) {
             throw new NullPointerException("Не может быть null");
         }
@@ -160,13 +169,13 @@ public class ArrayList implements StringList{
     @Override
     public void clear() {
         size = 0;
-        data = new String[capacity];
+        data = new Integer[capacity];
     }
 
 
     @Override
-    public String[] toArray() {
-        String[] array = new String[size];
+    public Integer[] toArray() {
+        Integer[] array = new Integer[size];
         for (int i = 0; i < size; i++) {
             array[i] = data[i];
         }
@@ -175,7 +184,7 @@ public class ArrayList implements StringList{
 
     @Override
     public String toString() {
-        return "ArrayList{" +
+        return "IntegerArrayList{" +
                 "data=" + Arrays.toString(data) +
                 ", size=" + size +
                 ", capacity=" + capacity +
