@@ -5,10 +5,7 @@ public interface StringList {
     // Добавление элемента.
     // Вернуть добавленный элемент
     // в качестве результата выполнения.
-    static String add(String item){
-        add(item);
-        return item;
-    }
+    String add(String item);
 
     // Добавление элемента
     // на определенную позицию списка.
@@ -17,14 +14,7 @@ public interface StringList {
     // выбросить исключение.
     // Вернуть добавленный элемент
     // в качестве результата выполнения.
-    static String add(int index, String item) throws IndexOutOfBoundsException{
-        if(index < 0 || index > size()){
-            throw new IndexOutOfBoundsException("Индекс больше диапазона");
-        } else {
-            add(index, item);
-            return item;
-        }
-    }
+    String add(int index, String item);
 
     // Установить элемент
     // на определенную позицию,
@@ -33,101 +23,58 @@ public interface StringList {
     // если индекс больше
     // фактического количества элементов
     // или выходит за пределы массива.
-    static String set(int index, String item) throws IndexOutOfBoundsException{
-        if(index < 0 || index > size()){
-            throw new IndexOutOfBoundsException("Индекс больше диапазона");
-        } else {
-            return set(index, item);
-        }
-    }
+    String set(int index, String item);
 
     // Удаление элемента.
     // Вернуть удаленный элемент
     // или исключение, если подобный
     // элемент отсутствует в списке.
-    static String remove(String item) throws NoSuchElementException{
-        if(!contains(item)){
-            throw new NoSuchElementException("Элемент не найден");
-        } else {
-            remove(item);
-            return item;
-        }
-    }
+    String remove(String item);
 
     // Удаление элемента по индексу.
     // Вернуть удаленный элемент
     // или исключение, если подобный
     // элемент отсутствует в списке.
-    static String remove(int index, String item) throws NoSuchElementException{
-        if(!contains(item)){
-            throw new NoSuchElementException("Элемент не найден");
-        } else {
-            remove(String.valueOf(index));
-            return item;
-        }
-    }
+    String remove(int index);
 
     // Проверка на существование элемента.
     // Вернуть true/false;
-    static boolean contains(String item){
-        return contains(item);
-    }
+    boolean contains(String item);
 
     // Поиск элемента.
     // Вернуть индекс элемента
     // или -1 в случае отсутствия.
-    static int indexOf(String item){
-        return indexOf(item);
-    }
+    int indexOf(String item);
 
     // Поиск элемента с конца.
     // Вернуть индекс элемента
     // или -1 в случае отсутствия.
-    static int lastIndexOf(String item){
-        return lastIndexOf(item);
-    }
+    int lastIndexOf(String item);
 
     // Получить элемент по индексу.
     // Вернуть элемент или исключение,
     // если выходит за рамки фактического
     // количества элементов.
-    static String get(int index) throws IndexOutOfBoundsException{
-        if(index > size()){
-            throw new IndexOutOfBoundsException("Индекс больше диапазона");
-        } else {
-            return get(index);
-        }
-    }
+    String get(int index);
 
     // Сравнить текущий список с другим.
     // Вернуть true/false или исключение,
     // если передан null.
-    static boolean equals(StringList otherList) throws NullPointerException{
-        if(otherList == null){
-            throw new NullPointerException("Null не может быть передан");
-        } else {
-            return equals(otherList);
-        }
-    }
+    boolean equals(StringList otherList);
 
     // Вернуть фактическое количество элементов.
-    static int size(){
-        return size();
-    }
+    int size();
 
     // Вернуть true,
     // если элементов в списке нет,
     // иначе false.
-    static boolean isEmpty(){
-        return isEmpty();
-    }
+    boolean isEmpty();
 
     // Удалить все элементы из списка.
-    static void clear(){
-        clear();
-    }
+    void clear();
 
-    static String[] toArray(String[] strings){
-        return toArray(new String[0]);
-    }
+    // Создать новый массив
+    // из строк в списке
+    // и вернуть его.
+    String[] toArray();
 }
