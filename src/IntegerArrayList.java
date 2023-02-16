@@ -15,17 +15,26 @@ public class IntegerArrayList implements IntegerList{
         this.size = 0;
     }
 
-    private void bubbleSort(Integer[] arr) {
-        int n = arr.length;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    // swap arr[j+1] and arr[j]
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
+    //method of increasing the array
+    private void increasingArray(int minCapacity) {
+        int oldCapacity = data.length;
+        if (minCapacity > oldCapacity) {
+            int newCapacity = oldCapacity * 2;
+            if (newCapacity < minCapacity)
+                newCapacity = minCapacity;
+            data = Arrays.copyOf(data, newCapacity);
+        }
+    }
+
+    private void sortInsertion(Integer[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int j = i - 1;
+            int temp = arr[i];
+            while (j >= 0 && arr[j] > temp) {
+                arr[j + 1] = arr[j];
+                j--;
             }
+            arr[j + 1] = temp;
         }
     }
 

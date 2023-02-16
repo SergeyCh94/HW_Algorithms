@@ -16,6 +16,17 @@ public class ArrayList implements StringList{
         this.size = 0;
     }
 
+    //method of increasing the array
+    private void increasingArray(int minCapacity) {
+        int oldCapacity = data.length;
+        if (minCapacity > oldCapacity) {
+            int newCapacity = oldCapacity * 2;
+            if (newCapacity < minCapacity)
+                newCapacity = minCapacity;
+            data = Arrays.copyOf(data, newCapacity);
+        }
+    }
+
     @Override
     public String add(String item) {
         if (item == null) {
