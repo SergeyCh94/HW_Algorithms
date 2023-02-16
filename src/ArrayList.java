@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class ArrayList implements StringList{
@@ -13,6 +14,17 @@ public class ArrayList implements StringList{
         this.capacity = capacity;
         this.data = new String[capacity];
         this.size = 0;
+    }
+
+    //method of increasing the array
+    private void increasingArray(int minCapacity) {
+        int oldCapacity = data.length;
+        if (minCapacity > oldCapacity) {
+            int newCapacity = oldCapacity * 2;
+            if (newCapacity < minCapacity)
+                newCapacity = minCapacity;
+            data = Arrays.copyOf(data, newCapacity);
+        }
     }
 
     @Override
