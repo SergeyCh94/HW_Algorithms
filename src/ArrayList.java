@@ -32,8 +32,10 @@ public class ArrayList implements StringList{
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
-        data[size] = item;
-        size++;
+        if (size == data.length) {
+            increasingArray(size + 1);
+        }
+        data[size++] = item;
         return item;
     }
 

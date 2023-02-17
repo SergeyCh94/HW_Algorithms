@@ -26,20 +26,34 @@ public class IntegerArrayList implements IntegerList{
         }
     }
 
-    private void sortInsertion(Integer[] arr) {
-        for (int i = 1; i < arr.length; i++) {
+    private void sortInsertion() {
+        for (int i = 1; i < data.length; i++) {
             int j = i - 1;
-            int temp = arr[i];
-            while (j >= 0 && arr[j] > temp) {
-                arr[j + 1] = arr[j];
+            int temp = data[i];
+            while (j >= 0 && data[j] > temp) {
+                data[j + 1] = data[j];
                 j--;
             }
-            arr[j + 1] = temp;
+            data[j + 1] = temp;
         }
     }
 
-    private int binarySearch(int key, int fromIndex, int toIndex) {
-        return Arrays.binarySearch(toArray(), fromIndex, toIndex, key);
+    private int binarySearch(Integer[] arr, int left, int right, int target) {
+        if (right >= left) {
+            int mid = left + (right - left) / 2;
+
+            if (arr[mid] == target) {
+                return mid;
+            }
+
+            if (arr[mid] > target) {
+                return binarySearch(arr, left, mid - 1, target);
+            }
+
+            return binarySearch(arr, mid + 1, right, target);
+        }
+
+        return -1;
     }
 
     @Override
@@ -47,8 +61,10 @@ public class IntegerArrayList implements IntegerList{
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
-        data[size] = item;
-        size++;
+        if (size == data.length) {
+            increasingArray(size + 1);
+        }
+        data[size++] = item;
         return item;
     }
 
@@ -57,11 +73,12 @@ public class IntegerArrayList implements IntegerList{
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
+
         if (index < 0 || index > capacity) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
 
-        for (int i = index; i > size; i--) {
+        for (int i = size; i > index; i--) {
             data[i] = data[i-1];
         }
         data[index] = item;
@@ -112,7 +129,25 @@ public class IntegerArrayList implements IntegerList{
 
     @Override
     public boolean contains(Integer item) {
-        return binarySearch(item, 0, size()) >= 0;
+        if (size == 0) {
+            return false;
+        }
+
+        sortInsertion();
+
+        int low = 0;
+        int high = size - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (item.compareTo(data[mid]) == 0) {
+                return true;
+            } else if (item.compareTo(data[mid]) < 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return false;
     }
 
     @Override
