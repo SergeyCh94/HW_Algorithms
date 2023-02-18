@@ -26,20 +26,72 @@ public class IntegerArrayList implements IntegerList{
         }
     }
 
-    private void sortInsertion(Integer[] arr) {
-        for (int i = 1; i < arr.length; i++) {
+    private void grow() {
+        int newCapacity = (int) (data.length * 1.5);
+        data = Arrays.copyOf(data, newCapacity);
+    }
+
+    public void sortInsertion() {
+        for (int i = 1; i < size; i++) {
+            int current = data[i];
             int j = i - 1;
-            int temp = arr[i];
-            while (j >= 0 && arr[j] > temp) {
-                arr[j + 1] = arr[j];
+            while (j >= 0 && data[j] > current) {
+                data[j + 1] = data[j];
                 j--;
             }
-            arr[j + 1] = temp;
+            data[j + 1] = current;
         }
     }
 
-    private int binarySearch(int key, int fromIndex, int toIndex) {
-        return Arrays.binarySearch(toArray(), fromIndex, toIndex, key);
+    private void quickSort(int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int pivot = partition(left, right);
+        quickSort(left, pivot - 1);
+        quickSort(pivot + 1, right);
+    }
+
+    private int partition(int left, int right) {
+        int pivotValue = data[right];
+        int pivotIndex = left;
+        for (int i = left; i < right; i++) {
+            if (data[i] < pivotValue) {
+                swap(i, pivotIndex);
+                pivotIndex++;
+            }
+        }
+        swap(pivotIndex, right);
+        return pivotIndex;
+    }
+
+    private void swap(int i, int j) {
+        int temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+
+    public void sortQuick() {
+        quickSort(0, size - 1);
+    }
+
+
+    private int binarySearch(Integer[] arr, int left, int right, int target) {
+        if (right >= left) {
+            int mid = left + (right - left) / 2;
+
+            if (arr[mid] == target) {
+                return mid;
+            }
+
+            if (arr[mid] > target) {
+                return binarySearch(arr, left, mid - 1, target);
+            }
+
+            return binarySearch(arr, mid + 1, right, target);
+        }
+
+        return -1;
     }
 
     @Override
@@ -47,8 +99,10 @@ public class IntegerArrayList implements IntegerList{
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
-        data[size] = item;
-        size++;
+        if (size == data.length) {
+            grow();
+        }
+        data[size++] = item;
         return item;
     }
 
@@ -60,8 +114,10 @@ public class IntegerArrayList implements IntegerList{
         if (index < 0 || index > capacity) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
-
-        for (int i = index; i > size; i--) {
+        if (size == data.length) {
+            grow();
+        }
+        for (int i = size; i > index; i--) {
             data[i] = data[i-1];
         }
         data[index] = item;
@@ -112,7 +168,25 @@ public class IntegerArrayList implements IntegerList{
 
     @Override
     public boolean contains(Integer item) {
-        return binarySearch(item, 0, size()) >= 0;
+            if (size == 0) {
+                return false;
+            }
+
+            sortInsertion();
+
+            int low = 0;
+            int high = size - 1;
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (item.compareTo(data[mid]) == 0) {
+                    return true;
+                } else if (item.compareTo(data[mid]) < 0) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+            return false;
     }
 
     @Override

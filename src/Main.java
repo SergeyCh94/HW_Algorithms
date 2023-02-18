@@ -79,5 +79,21 @@ public class Main {
         // Clearing the list
         list.clear();
         System.out.println("Is list empty after clear: " + list.isEmpty());
+
+        System.out.println("_______________________________________________");
+
+        // Add elements to the list
+        for (int i = 0; i < 10; i++) {
+            list.add((int) (Math.random() * 100));
+        }
+
+        // Print the unsorted list
+        System.out.println("Unsorted list: " + list);
+
+        // Sort the list using insertion sort
+        list.sortInsertion();
+
+        // Print the sorted list
+        System.out.println("Sorted list: " + list);
     }
 }
