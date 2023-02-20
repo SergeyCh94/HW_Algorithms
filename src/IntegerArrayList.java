@@ -1,18 +1,17 @@
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-public class ArrayList implements StringList{
-
-    private String[] data;
+public class IntegerArrayList implements IntegerList{
+    private Integer[] data;
     private int size;
     private int capacity;
 
-    public ArrayList(int capacity) {
+    public IntegerArrayList(int capacity) {
         if (capacity < 0){
             throw new IllegalArgumentException("Размер не может быть отрицательным значением");
         }
         this.capacity = capacity;
-        this.data = new String[capacity];
+        this.data = new Integer[capacity];
         this.size = 0;
     }
 
@@ -27,8 +26,38 @@ public class ArrayList implements StringList{
         }
     }
 
+    private void sortInsertion() {
+        for (int i = 1; i < data.length; i++) {
+            int j = i - 1;
+            int temp = data[i];
+            while (j >= 0 && data[j] > temp) {
+                data[j + 1] = data[j];
+                j--;
+            }
+            data[j + 1] = temp;
+        }
+    }
+
+    private int binarySearch(Integer[] arr, int left, int right, int target) {
+        if (right >= left) {
+            int mid = left + (right - left) / 2;
+
+            if (arr[mid] == target) {
+                return mid;
+            }
+
+            if (arr[mid] > target) {
+                return binarySearch(arr, left, mid - 1, target);
+            }
+
+            return binarySearch(arr, mid + 1, right, target);
+        }
+
+        return -1;
+    }
+
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
@@ -40,15 +69,16 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
+
         if (index < 0 || index > capacity) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
 
-        for (int i = index; i > size; i--) {
+        for (int i = size; i > index; i--) {
             data[i] = data[i-1];
         }
         data[index] = item;
@@ -57,21 +87,21 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя добавить null");
         }
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
-        String replaced = data[index];
+        Integer replaced = data[index];
         data[index] = item;
         return replaced;
     }
 
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Нельзя удалить null");
         }
@@ -84,11 +114,11 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String remove(int index) {
+    public Integer remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
-        String removed = data[index];
+        Integer removed = data[index];
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i+1];
         }
@@ -98,20 +128,30 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public boolean contains(String item) {
-        if (item == null) {
+    public boolean contains(Integer item) {
+        if (size == 0) {
             return false;
         }
-        for (int i = 0; i < size; i++) {
-            if (item.equals(data[i])) {
+
+        sortInsertion();
+
+        int low = 0;
+        int high = size - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (item.compareTo(data[mid]) == 0) {
                 return true;
+            } else if (item.compareTo(data[mid]) < 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
             }
         }
         return false;
     }
 
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
         if (item == null) {
             return -1;
         }
@@ -124,7 +164,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
         if (item == null) {
             return -1;
         }
@@ -137,7 +177,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
         }
@@ -145,7 +185,7 @@ public class ArrayList implements StringList{
     }
 
     @Override
-    public boolean equals(StringList otherList) {
+    public boolean equals(IntegerList otherList) {
         if (otherList == null) {
             throw new NullPointerException("Не может быть null");
         }
@@ -173,13 +213,13 @@ public class ArrayList implements StringList{
     @Override
     public void clear() {
         size = 0;
-        data = new String[capacity];
+        data = new Integer[capacity];
     }
 
 
     @Override
-    public String[] toArray() {
-        String[] array = new String[size];
+    public Integer[] toArray() {
+        Integer[] array = new Integer[size];
         for (int i = 0; i < size; i++) {
             array[i] = data[i];
         }
@@ -188,7 +228,7 @@ public class ArrayList implements StringList{
 
     @Override
     public String toString() {
-        return "ArrayList{" +
+        return "IntegerArrayList{" +
                 "data=" + Arrays.toString(data) +
                 ", size=" + size +
                 ", capacity=" + capacity +
